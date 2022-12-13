@@ -2,15 +2,11 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	controller "github.com/mefefirat/golang-rest-api/controllers"
 )
 
 func InitUserRoutes(route *gin.Engine) {
 
 	groupRoute := route.Group("/api/v1/users")
-	groupRoute.GET("/list", listUser)
-}
-
-func listUser(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, "{a: 1}")
+	groupRoute.GET("/list", controller.listUser)
 }
