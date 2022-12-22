@@ -2,21 +2,43 @@ package users
 
 import (
 	"github.com/gin-gonic/gin"
-	model "github.com/mefefirat/golang-rest-api/models/users"
+	user "github.com/mefefirat/golang-rest-api/models/users"
 	"net/http"
 )
 
-func checkError(err error) {
+func checkError(err error, c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
 }
 
-func ListUser(c *gin.Context) {
+func List(c *gin.Context) {
 
-	//w.Header().Set("Content-Type", "application/json")
-	users, err := model.List()
-	checkError(err)
+	users, err := user.List()
 
-	c.IndentedJSON(http.StatusOK, users)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "users": users})
+
+}
+
+func Create(c *gin.Context) {
+
+	username := c.PostForm("username")
+	if username == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Please enter username"})
+		return
+	}
+
+	id, err := user.Create(username)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "insert_id": id})
 }

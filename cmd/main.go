@@ -18,7 +18,6 @@ func Initialize() *gin.Engine {
 
 	router := gin.Default()
 	database.Connect()
-	log.Print(router)
 
 	route.InitRoutes(router)
 

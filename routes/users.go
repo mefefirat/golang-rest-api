@@ -7,6 +7,7 @@ import (
 
 func InitRoutes(route *gin.Engine) {
 
-	groupRoute := route.Group("/api/v1/users")
-	groupRoute.GET("/list", userController.ListUser)
+	groupRoute := route.Group("/api/v1/user")
+	groupRoute.GET("/list", userController.List)
+	groupRoute.POST("/add", userController.Create)
 }
