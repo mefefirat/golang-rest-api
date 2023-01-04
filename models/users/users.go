@@ -2,26 +2,19 @@ package users
 
 import (
 	"github.com/mefefirat/golang-rest-api/database"
+	"github.com/mefefirat/golang-rest-api/models/users/entry"
 )
 
-type Users struct {
-	ID       int    `json:"id"`
-	UserName string `json:"username"`
+func Create(user *entry.User) (int, error) {
 
-	/*CreatedAt *time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at" db:"updated_at"`*/
-}
-
-func Create(username string) (int, error) {
-
-	query := `INSERT INTO users ("username") VALUES ($1) RETURNING id`
+	query := `INSERT INTO users("username", "email") VALUES ($1, $2) RETURNING id`
 	stmt, err := database.DB.Prepare(query)
 	if stmt != nil {
 		defer stmt.Close()
 	}
 
 	var id int
-	err = stmt.QueryRow(username).Scan(&id)
+	err = stmt.QueryRow(user.UserName, user.Email).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
@@ -33,23 +26,23 @@ func Create(username string) (int, error) {
 
 }
 
-func List() (*[]Users, error) {
+func List() (*[]entry.User, error) {
 
 	rows, err := database.DB.Query("select * from users")
 	if rows != nil {
 		defer rows.Close()
 	}
 
-	users := []Users{}
+	users := []entry.User{}
 
 	if err != nil {
-		return &[]Users{}, err
+		return &[]entry.User{}, err
 	}
 	for rows.Next() {
-		user := Users{}
-		err := rows.Scan(&user.ID, &user.UserName)
+		user := entry.User{}
+		err := rows.Scan(&user.ID, &user.UserName, &user.Email)
 		if err != nil {
-			return &[]Users{}, err
+			return &[]entry.User{}, err
 		}
 		users = append(users, user)
 	}

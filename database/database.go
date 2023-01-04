@@ -17,8 +17,7 @@ const (
 var DB *sql.DB
 
 func Connect() {
-	//var connectionString string = fmt.Sprintf("HOST=%s PORT=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	var connectionString string = fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", HOST, USER, PASSWORD, DATABASE)
+	var connectionString string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", HOST, PORT, USER, PASSWORD, DATABASE)
 
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
