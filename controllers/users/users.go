@@ -30,13 +30,27 @@ func Create(c *gin.Context) {
 
 	email := c.PostForm("email")
 	if email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Please enter username"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Please enter email"})
+		return
+	}
+
+	first_name := c.PostForm("first_name")
+	if first_name == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Please enter first name"})
+		return
+	}
+
+	last_name := c.PostForm("last_name")
+	if last_name == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Please enter last name"})
 		return
 	}
 
 	user := entry.User{
-		UserName: username,
-		Email:    email,
+		UserName:  username,
+		Email:     email,
+		FirstName: first_name,
+		LastName:  last_name,
 	}
 
 	id, err := model.Create(&user)

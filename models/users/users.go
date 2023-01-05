@@ -7,16 +7,16 @@ import (
 
 func Create(user *entry.User) (int, error) {
 
-	query := `INSERT INTO users("username", "email") VALUES ($1, $2) RETURNING id`
+	query := `INSERT INTO users("username", "email", "first_name", "last_name") VALUES ($1, $2, $3, $4) RETURNING id`
 	stmt, err := database.DB.Prepare(query)
 	if stmt != nil {
 		defer stmt.Close()
 	}
 
 	var id int
-	err = stmt.QueryRow(user.UserName, user.Email).Scan(&id)
+	err = stmt.QueryRow(user.UserName, user.Email, user.FirstName, user.LastName).Scan(&id)
 	if err != nil {
-		panic(err)
+		return id, err
 	}
 
 	return id, nil
